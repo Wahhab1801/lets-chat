@@ -35,3 +35,100 @@ socket.on('chat', (data) => {
 socket.on('userTyping', (data) => {
     typing.innerHTML += '<p> <em>' + data + ' is typing... </em></p>'
 })
+
+/* video chat*/
+
+// get the local video and display it with permission
+function getLVideo(callbacks) {
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    var constraints = {
+        audio: true,
+        video: true
+    }
+    navigator.getUserMedia(constraints, callbacks.success, callbacks.error)
+}
+function recStream(stream, elemid) {
+    var video = document.getElementById(elemid);
+
+    video.srcObject = stream;
+
+    window.peer_stream = stream;
+}
+getLVideo({
+    success: function (stream) {
+        window.localstream = stream;
+        recStream(stream, 'lVideo');
+    },
+    error: function (err) {
+        alert("cannot access your camera");
+        console.log(err);
+    }
+})
+var conn;
+var peer_id;
+// create a peer connection with peer obj
+var peer = new Peer();
+
+// display the peer id on the DOM
+peer.on('open', function () {
+    document.getElementById("displayId").innerHTML = peer.id
+})
+
+peer.on('connection', function (connection) {
+    conn = connection;
+    peer_id = connection.peer
+
+    document.getElementById('connId').value = peer_id;
+});
+peer.on('error', function (err) {
+    alert("an error has happened:" + err)
+    console.log(err);
+})
+// onclick with the connection butt = expose ice info
+document.getElementById('conn_button').addEventListener('click' , function(){
+    peer_id = document.getElementById("connId").value;
+    if(peer_id){
+        conn= peer.connect(peer_id)
+    }
+    else{
+        alert("enter an id");
+        return false;
+    }
+})
+// call on click (offer and answer is exchanged)
+peer.on ('call',function(cal){
+    var acceptCall = confirm("Do you want to answer this call");
+
+    if(acceptCall){
+        call.answer(window.localstream);
+
+        call.on('stream', function(stream){
+            window.peer_stream = stream;
+
+            recStream(stream, 'rVideo')
+        });
+        call.on('close', function(){
+            alert('The call has endend')
+        })
+    }
+        else{
+            console.log("call denied")
+
+    }
+});
+// ask to call
+document.getElementById('call_button').addEventListener('click',function(){
+    console.log("calling a peer:"+peer_id);
+    console.log(peer);
+
+    var call = peer.call(peer_id, window.localstream);
+
+    call.on('stream', function(stream){
+        window.peer_stream = stream;
+
+        recStream(stream, rVideo);
+    })
+})
+// accept the call
+
+// display the remote video and local video on the clients.
