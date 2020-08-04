@@ -1,5 +1,5 @@
-const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
-
+ const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
+// const socket = io('http://localhost:3000');
 socket.on('chat-message', data => {
     console.log(data)
 });
@@ -96,7 +96,7 @@ document.getElementById('conn_button').addEventListener('click' , function(){
     }
 })
 // call on click (offer and answer is exchanged)
-peer.on ('call',function(cal){
+peer.on ('call',function(call){
     var acceptCall = confirm("Do you want to answer this call");
 
     if(acceptCall){
@@ -104,7 +104,7 @@ peer.on ('call',function(cal){
 
         call.on('stream', function(stream){
             window.peer_stream = stream;
-
+            console.log('entered')
             recStream(stream, 'rVideo')
         });
         call.on('close', function(){
