@@ -1,4 +1,4 @@
- const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
+const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
 // const socket = io('http://localhost:3000');
 socket.on('chat-message', data => {
     console.log(data)
@@ -121,6 +121,10 @@ peer.on('call', function (call) {
 
     }
 });
+
+peer.on('disconnected', function () {
+    console.log(peer.disconnected);
+})
 // ask to call
 document.getElementById('call_button').addEventListener('click', function () {
     console.log("calling a peer:" + peer_id);
@@ -137,3 +141,18 @@ document.getElementById('call_button').addEventListener('click', function () {
 // accept the call
 
 // display the remote video and local video on the clients.
+
+// End video Stream
+document.getElementById('end_button').addEventListener('click', function () {
+    console.log(peer);
+    peer.disconnect();
+    //peer.destroy()
+
+    //   window.localStream.end();
+
+    // mediaStream.getVideoTracks()[0].enabled = !(mediaStream.getVideoTracks()[0].enabled);
+
+    //  window.existingCall.close();
+
+    // onStart();
+})
