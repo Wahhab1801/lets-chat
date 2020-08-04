@@ -78,8 +78,9 @@ peer.on('open', function () {
 peer.on('connection', function (connection) {
     conn = connection;
     peer_id = connection.peer
-
+    console.log("helo");
     document.getElementById('connId').value = peer_id;
+    
 });
 peer.on('error', function (err) {
     alert("an error has happened:" + err)
@@ -147,6 +148,7 @@ peer.on('call', function (call) {
 
 peer.on('disconnected', function () {
     console.log(peer.disconnected);
+ //   peer.peer_stream.get
 })
 // ask to call
 document.getElementById('call_button').addEventListener('click', function () {
@@ -168,7 +170,7 @@ document.getElementById('end_button').addEventListener('click', function () {
     // peer.disconnect();
     peer.destroy();
     stopSharingVideoAndAudio(window.peer_stream);
-    peer.removeTrack(window.peer_stream);
+    // peer.removeTrack(window.peer_stream);
     // window.peer_stream = undefined;
     //   window.localStream.end();
 
