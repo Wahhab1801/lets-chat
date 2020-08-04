@@ -1,5 +1,5 @@
- const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
-// const socket = io('http://localhost:3000');
+//  const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
+const socket = io('http://localhost:3000');
 socket.on('chat-message', data => {
     console.log(data)
 });
@@ -47,8 +47,12 @@ function getLVideo(callbacks) {
     }
     navigator.getUserMedia(constraints, callbacks.success, callbacks.error)
 }
+
 function recStream(stream, elemid) {
     var video = document.getElementById(elemid);
+    console.log(elemid);
+    console.log('receve strean');
+    console.log(video)
 
     video.srcObject = stream;
 
@@ -85,48 +89,49 @@ peer.on('error', function (err) {
     console.log(err);
 })
 // onclick with the connection butt = expose ice info
-document.getElementById('conn_button').addEventListener('click' , function(){
+document.getElementById('conn_button').addEventListener('click', function () {
     peer_id = document.getElementById("connId").value;
-    if(peer_id){
-        conn= peer.connect(peer_id)
+    if (peer_id) {
+        conn = peer.connect(peer_id)
     }
-    else{
+    else {
         alert("enter an id");
         return false;
     }
 })
 // call on click (offer and answer is exchanged)
-peer.on ('call',function(call){
+peer.on('call', function (call) {
     var acceptCall = confirm("Do you want to answer this call");
 
-    if(acceptCall){
+    if (acceptCall) {
         call.answer(window.localstream);
 
-        call.on('stream', function(stream){
+        call.on('stream', function (stream) {
             window.peer_stream = stream;
+            console.log(peer)
             console.log('entered')
             recStream(stream, 'rVideo')
         });
-        call.on('close', function(){
+        call.on('close', function () {
             alert('The call has endend')
         })
     }
-        else{
-            console.log("call denied")
+    else {
+        console.log("call denied")
 
     }
 });
 // ask to call
-document.getElementById('call_button').addEventListener('click',function(){
-    console.log("calling a peer:"+peer_id);
+document.getElementById('call_button').addEventListener('click', function () {
+    console.log("calling a peer:" + peer_id);
     console.log(peer);
 
     var call = peer.call(peer_id, window.localstream);
 
-    call.on('stream', function(stream){
+    call.on('stream', function (stream) {
         window.peer_stream = stream;
-
-        recStream(stream, rVideo);
+        console.log('Hello')
+        recStream(stream, 'rVideo');
     })
 })
 // accept the call

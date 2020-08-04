@@ -18,39 +18,65 @@
 </head>
 
 <body>
-
-    <!-- connects to the server and displays results -->
-    <h1 class="h3 ab-3 font-weight-normal">Lets Chat</h1>
     <div class="container">
-        <div id="chat">
-            <div id="output"></div>
-            <div id="typing"></div>
+
+        <!-- connects to the server and displays results -->
+        <h1 class="h3 ab-3 font-weight-normal">Lets Chat</h1>
+        <div class="container">
+            <div id="chat">
+                <div id="output"></div>
+                <div id="typing"></div>
+            </div>
         </div>
-    </div>
-    <div class="container">
-        <input id="handle" type="text" class="form-control" placeholder="name" required autofocus />
-        <input id="message" type="text" class="form-control" placeholder="enter a message" required />
-        <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+        <div class="row justify-content-center">
+            <div class="col col-sm-6 col-md-4 col-lg-4">
+                <input id="handle" type="text" class="form-control" placeholder="name" required autofocus />
+                <input id="message" type="text" class="form-control" placeholder="enter a message" required />
+                <button id="submit" class="btn btn-lg btn-primary btn-block" type="submit">Send</button>
+            </div>
+        </div>
 
-    </div>
+        <hr>
 
-    <hr>
-    <div class="container">
         <div class="row">
-            <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="col col-sm-6 col-lg-6">
                 remote
-                <video id="rVideo" autoplay="autplay">
+                <video id="rVideo" style="width: 100%; height: auto;" autoplay="autplay">
             </div>
-            <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="col-12 col-sm-6 col-lg-6">
                 local
-                <video id="lVideo" autoplay="autplay" muted>
+                <video id="lVideo" style="width: 100%; height: auto;" autoplay="autplay" muted>
             </div>
         </div>
-        <span id = "displayId"></span>
-        <input id="connId" type="text" class="form-control" placeholder="enter a connection id" required>
-        <button id="conn_button" class="btn btn-lg btn-success btn-block" type="submit">Connect</button>
-        <button id="call_button" class="btn btn-lg btn-danger btn-block" type="submit">Call</button>
-
+        <hr>
+        <div class="row justify-content-center">
+            <div class="col col-sm-6 col-md-4 col-lg-4">
+                <span id="displayId"></span>
+                <input id="connId" type="text" class="form-control" placeholder="enter a connection id" required>
+                <br>
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <button id="conn_button" class="btn btn-lg btn-success btn-block" type="submit">Connect</button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-6">
+                        <button id="call_button" class="btn btn-lg btn-success btn-block" type="submit">Call</button>
+                    </div>
+                    <div class="col-6">
+                        <button id="call_button" class="btn btn-lg btn-danger btn-block" type="submit">End</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="container mt-4">
+            <div class="row">
+                <div class="col">
+                    <p class="text-center">Developed By <a href="#">Abdul Wahhab</a></p>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- <script src="http://localhost:3000/socket.io/socket.io.js" async defer></script> -->
@@ -63,7 +89,6 @@
     <!-- <script>
             var socket = io();
         </script> -->
-
 </body>
 
 </html>
