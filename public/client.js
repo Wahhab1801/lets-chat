@@ -1,5 +1,5 @@
-// const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
-const socket = io('http://localhost:3000');
+ const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
+//const socket = io('http://localhost:3000');
 socket.on('chat-message', data => {
     console.log(data)
 });
