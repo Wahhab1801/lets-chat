@@ -1,5 +1,5 @@
-const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
-// const socket = io('http://localhost:3000');
+// const socket = io(`https://lets-chat1.herokuapp.com`); //location of where server is hosting socket app
+const socket = io('http://localhost:3000');
 socket.on('chat-message', data => {
     console.log(data)
 });
@@ -58,16 +58,13 @@ function recStream(stream, elemid) {
 
     window.peer_stream = stream;
 }
-getLVideo({
-    success: function (stream) {
-        window.localstream = stream;
-        recStream(stream, 'lVideo');
-    },
-    error: function (err) {
-        alert("cannot access your camera");
-        console.log(err);
-    }
-})
+
+function removeStream(stream, elemid) {
+    var video = document.getElementById(elemid);
+    video.srcObject = null;
+    window.peer_stream = stream;
+}
+
 var conn;
 var peer_id;
 // create a peer connection with peer obj
@@ -86,8 +83,37 @@ peer.on('connection', function (connection) {
 });
 peer.on('error', function (err) {
     alert("an error has happened:" + err)
-    console.log(err);
+    // console.log(err);
 })
+
+// to stop sharing video and audio
+function stopSharingVideoAndAudio(stream) {
+    stream.getTracks().forEach(track => {
+        if (track.readyState === 'live') {
+            track.stop();
+        }
+    })
+}
+
+// onclick open video button to access camera
+document.getElementById('triggerBtn').addEventListener('click', function () {
+    let videoDiv = document.getElementById('Upper');
+    if (videoDiv.style.display === 'none') {
+        stopSharingVideoAndAudio(window.localstream);
+    } else {
+        getLVideo({
+            success: function (stream) {
+                window.localstream = stream;
+                recStream(stream, 'lVideo');
+            },
+            error: function (err) {
+                alert("cannot access your camera");
+                console.log(err);
+            }
+        })
+    }
+})
+
 // onclick with the connection butt = expose ice info
 document.getElementById('conn_button').addEventListener('click', function () {
     peer_id = document.getElementById("connId").value;
@@ -108,8 +134,6 @@ peer.on('call', function (call) {
 
         call.on('stream', function (stream) {
             window.peer_stream = stream;
-            console.log(peer)
-            console.log('entered')
             recStream(stream, 'rVideo')
         });
         call.on('close', function () {
@@ -118,7 +142,6 @@ peer.on('call', function (call) {
     }
     else {
         console.log("call denied")
-
     }
 });
 
@@ -128,13 +151,11 @@ peer.on('disconnected', function () {
 // ask to call
 document.getElementById('call_button').addEventListener('click', function () {
     console.log("calling a peer:" + peer_id);
-    console.log(peer);
 
     var call = peer.call(peer_id, window.localstream);
 
     call.on('stream', function (stream) {
         window.peer_stream = stream;
-        console.log('Hello')
         recStream(stream, 'rVideo');
     })
 })
@@ -144,10 +165,11 @@ document.getElementById('call_button').addEventListener('click', function () {
 
 // End video Stream
 document.getElementById('end_button').addEventListener('click', function () {
-    console.log(peer);
-    peer.disconnect();
-    //peer.destroy()
-
+    // peer.disconnect();
+    peer.destroy();
+    stopSharingVideoAndAudio(window.peer_stream);
+    peer.removeTrack(window.peer_stream);
+    // window.peer_stream = undefined;
     //   window.localStream.end();
 
     // mediaStream.getVideoTracks()[0].enabled = !(mediaStream.getVideoTracks()[0].enabled);

@@ -118,10 +118,9 @@
 
     <script>
 
-        const showHidden = (event) => {
-            let elem = document.getElementById('Upper'); triggerBtn
+        const showHidden = () => {
+            let elem = document.getElementById('Upper');
             let button = document.getElementById('triggerBtn');
-            console.log(event)
             console.log(elem.style.display === 'none')
             if (elem.style.display === 'none') {
                 elem.style = "display: block;";
